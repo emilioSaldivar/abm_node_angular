@@ -9,10 +9,10 @@ const db = require("./app/models");
 const app = express();
 
 var corsOptions = {
-    origin: "http://192.168.0.5:9090"
+    origin: "http://192.168.0.5:4200"
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
