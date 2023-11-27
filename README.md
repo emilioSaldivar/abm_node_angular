@@ -11,3 +11,10 @@ Este proyecto implementa un servidor backend utilizando Node.js, Express, y Sequ
 1. **Clona el repositorio:**
    ```bash
    git clone https://github.com/emilioSaldivar/abm_node_angular.git
+
+2. Ve al directorio backend, instala dependencias y ejecuta el servidor
+
+   ```bash
+   cd backend
+   npm install
+   node server.js
