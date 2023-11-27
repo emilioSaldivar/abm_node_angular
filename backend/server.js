@@ -1,10 +1,10 @@
 const express = require("express");
 const config = require('./app/config/db.config');
-const { Sequelize } = require('sequelize'); // Agrega esta línea
+const { Sequelize } = require('sequelize');
 
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const db = require("./app/models"); // Agrega esta línea
+const db = require("./app/models");
 
 const app = express();
 
@@ -51,7 +51,8 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
     }
 })();
 
-require("./app/routes/venta.routes")(app);
+// Incluye las rutas de orden
+require("./app/routes/orden.routes")(app);
 
 const PORT = process.env.PORT || 9090;
 

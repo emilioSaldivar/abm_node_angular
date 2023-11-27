@@ -1,19 +1,22 @@
 module.exports = (sequelize, Sequelize) => {
-    const Venta = sequelize.define("Venta", {
+    const Orden = sequelize.define("Orden", {
         cliente: {
             type: Sequelize.STRING
         },
-        total: {
+        monto_envio: {
             type: Sequelize.BIGINT
         },
-        factura: {
+        nro_orden: {
             type: Sequelize.STRING
         },
         id: {
             type: Sequelize.BIGINT,
             primaryKey: true,
             autoIncrement: true
+        },
+        direccion: {
+            type: Sequelize.STRING
         }
     });
-    return Venta;
+    return Orden;
 };

@@ -11,28 +11,26 @@ export class AppComponent {
   title = 'frontend';
   constructor(private http: HttpClient) { }
 
-  columnas: string[] = ['cliente', 'total', 'factura', 'borrar', 'seleccionar'];
+  columnas: string[] = ['cliente', 'monto_envio', 'nro_orden', 'direccion', 'borrar', 'seleccionar'];
 
   datos: any;
 
-  ventaselect: Venta = new Venta(0, "", 0 , "");
+  ordenSelect: Orden = new Orden(0, "", 0, "", "");
 
-  @ViewChild(MatTable) tabla1!: MatTable<Venta>;
+  @ViewChild(MatTable) tabla1!: MatTable<Orden>;
 
-  borrarVenta(id: number) {
-    if (confirm("¿Realmente desea eliminar esta venta?")) {
-      this.http.delete(`http://192.168.0.5:9090/api/venta/${id}`)
+  borrarOrden(id: number) {
+    if (confirm("¿Realmente desea eliminar esta orden?")) {
+      this.http.delete(`http://192.168.0.5:9090/api/orden/${id}`)
           .subscribe(
               () => {
-                  // Éxito: la venta se eliminó en el backend
-                  // Puedes manejar aquí cualquier acción adicional que desees en el frontend
-                  this.datos = this.datos.filter((venta: any) => venta.id !== id);
+                  // Éxito: la orden se eliminó en el backend
+                  this.datos = this.datos.filter((orden: any) => orden.id !== id);
                   this.tabla1.renderRows();
               },
               (error) => {
                   // Manejo de errores en caso de que la solicitud al backend falle
-                  console.error("Error al eliminar la venta:", error);
-                  // Puedes mostrar un mensaje de error al usuario si es necesario
+                  console.error("Error al eliminar la orden:", error);
               }
           );
   }
@@ -40,46 +38,42 @@ export class AppComponent {
 
   agregar() {
     // Datos a enviar
-    const ventaData = {
-      cliente: this.ventaselect.cliente,
-      total: this.ventaselect.total,
-      factura: this.ventaselect.factura
+    const ordenData = {
+      cliente: this.ordenSelect.cliente,
+      monto_envio: this.ordenSelect.monto_envio,
+      nro_orden: this.ordenSelect.nro_orden,
+      direccion: this.ordenSelect.direccion
     };
 
-    // Configura las cabeceras si es necesario
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
     // Realiza la solicitud POST directa al backend
-    this.http.post('http://192.168.0.5:9090/api/venta', ventaData, { headers })
+    this.http.post('http://192.168.0.5:9090/api/orden', ordenData, { headers })
       .subscribe(
         (data) => {
-          // Éxito: la venta se agregó en el backend
-          // Puedes manejar aquí cualquier acción adicional que desees en el frontend
+          // Éxito: la orden se agregó en el backend
           this.datos.push(data); // Agrega los datos a la tabla en el frontend
           this.tabla1.renderRows();
-          this.ventaselect = new Venta(0, "", 0, "");
+          this.ordenSelect = new Orden(0, "", 0, "", "");
         },
         (error) => {
           // Manejo de errores en caso de que la solicitud al backend falle
-          console.error("Error al agregar la venta:", error);
-          // Puedes mostrar un mensaje de error al usuario si es necesario
+          console.error("Error al agregar la orden:", error);
         }
       );
   }
 
-  editarVenta(venta: Venta) {
-    this.http.put<Venta>(`http://192.168.0.5:9090/api/venta/${venta.id}`, venta)
+  editarOrden(orden: Orden) {
+    this.http.put<Orden>(`http://192.168.0.5:9090/api/orden/${orden.id}`, orden)
       .subscribe(
         (data) => {
           console.log("Edición exitosa:", data);
-          // Éxito: la venta se actualizó en el backend
-          // Puedes manejar aquí cualquier acción adicional que desees en el frontend
-          // Por ejemplo, cerrar el formulario de edición
+          // Éxito: la orden se actualizó en el backend
 
           // Encuentra el índice del elemento en this.datos
-          const indice = this.datos.findIndex((item: Venta) => item.id === data.id);
+          const indice = this.datos.findIndex((item: Orden) => item.id === data.id);
 
           // Actualiza el elemento en this.datos
           this.datos[indice] = data;
@@ -89,37 +83,35 @@ export class AppComponent {
         },
         (error) => {
           // Manejo de errores en caso de que la solicitud al backend falle
-          console.error("Error al actualizar la venta:", error);
-          // Puedes mostrar un mensaje de error al usuario si es necesario
+          console.error("Error al actualizar la orden:", error);
         }
       );
   }
 
-  seleccionar(venta: Venta) {
-    this.ventaselect.id = venta.id; // Asigna el valor del id
-    this.ventaselect.cliente = venta.cliente;
-    this.ventaselect.total = venta.total;
-    this.ventaselect.factura = venta.factura;
+  seleccionar(orden: Orden) {
+    this.ordenSelect.id = orden.id; // Asigna el valor del id
+    this.ordenSelect.cliente = orden.cliente;
+    this.ordenSelect.monto_envio = orden.monto_envio;
+    this.ordenSelect.nro_orden = orden.nro_orden;
+    this.ordenSelect.direccion = orden.direccion;
   }
 
   guardar() {
-    console.log('ventaselect.id = ', this.ventaselect.id);
-    if (this.ventaselect.id) {
-      // Realizar lógica para actualizar el registro existente
+    console.log('ordenSelect.id = ', this.ordenSelect.id);
+    if (this.ordenSelect.id) {
       // Llama a la función para actualizar el registro
-      this.editarVenta(this.ventaselect);
+      this.editarOrden(this.ordenSelect);
     } else {
-      // Realizar lógica para agregar un nuevo registro
       // Llama a la función para agregar un nuevo registro
       this.agregar();
     }
 
     // Restablece el formulario después de la operación
-    this.ventaselect = new Venta(0, "", 0, "");
+    this.ordenSelect = new Orden(0, "", 0, "", "");
   }
 
   ngOnInit() {
-    this.http.get("http://192.168.0.5:9090/api/venta")
+    this.http.get("http://192.168.0.5:9090/api/orden")
       .subscribe(
         resultado => {
           this.datos = resultado;
@@ -129,7 +121,7 @@ export class AppComponent {
 }
 
 
-export class Venta {
-  constructor(public id: number, public cliente: string, public total: number, public factura: string) {
+export class Orden {
+  constructor(public id: number, public cliente: string, public monto_envio: number, public nro_orden: string, public direccion: string) {
   }
 }
