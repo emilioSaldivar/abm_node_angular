@@ -18,3 +18,9 @@ Este proyecto implementa un servidor backend utilizando Node.js, Express, y Sequ
    cd backend
    npm install
    node server.js
+
+3. Ve al directorio frontend, instala dependencias y ejecuta el proyecto
+   ```bash
+   cd frontend
+   npm install
+   ng serve
