@@ -37,7 +37,7 @@ exports.findOne = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error al obtener venta con id=" + id
+                message: "Error al obtener orden con id=" + id
             });
         });
 };
@@ -80,13 +80,13 @@ exports.update = (req, res) => {
 
             // Actualiza los campos con los datos del cuerpo de la solicitud
             venta.cliente = req.body.cliente;
-            console.log('venta.cliente', venta.cliente)
+            console.log('orden.cliente', venta.cliente)
             venta.nro_orden = req.body.nro_orden;
-            console.log('venta.factura', venta.nro_orden)
+            console.log('orden.nro_oden', venta.nro_orden)
             venta.monto_envio = req.body.monto_envio;
-            console.log('venta.total', venta.monto_envio)
+            console.log('orden.monto_envio', venta.monto_envio)
             venta.direccion = req.body.direccion;
-            console.log('venta.direccion', venta.direccion)
+            console.log('orden.direccion', venta.direccion)
 
             // Guarda la venta actualizada
             venta.save()
@@ -95,13 +95,13 @@ exports.update = (req, res) => {
                 })
                 .catch(err => {
                     res.status(500).send({
-                        message: "Error al actualizar la venta con id=" + id
+                        message: "Error al actualizar la orden con id=" + id
                     });
                 });
         })
         .catch(err => {
             res.status(500).send({
-                message: "Error al obtener venta con id=" + id
+                message: "Error al obtener orden con id=" + id
             });
         });
 };
