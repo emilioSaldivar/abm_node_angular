@@ -1,20 +1,32 @@
-const dbConfig = require("../config/db.config.js");
-const Sequelize = require("sequelize");
-const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
-    host: dbConfig.HOST,
-    dialect: dbConfig.dialect,
-    operatorsAliases: false,
-    port: dbConfig.PORT,
+const Sequelize = require('sequelize');
+const config = require('../config/db.config');
+
+const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
+    host: config.HOST,
+    dialect: config.dialect,
     pool: {
-        max: dbConfig.pool.max,
-        min: dbConfig.pool.min,
-        acquire: dbConfig.pool.acquire,
-        idle: dbConfig.pool.idle
+        max: config.pool.max,
+        min: config.pool.min,
+        acquire: config.pool.acquire,
+        idle: config.pool.idle
     }
 });
 
+// Verificar la conexión a la base de datos
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log('Conexión a la base de datos establecida correctamente.');
+    })
+    .catch(err => {
+        console.error('Error al conectar a la base de datos:', err);
+    });
+
 const db = {};
+
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-db.Ventas = require("./orden.model.js")(sequelize, Sequelize);
+
+db.orden = require('./orden.model.js')(sequelize, Sequelize);
+
 module.exports = db;

@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 
+const HOST_IP = '192.168.255.192';  // Define la dirección IP como constante
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -21,19 +23,19 @@ export class AppComponent {
 
   borrarOrden(id: number) {
     if (confirm("¿Realmente desea eliminar esta orden?")) {
-      this.http.delete(`http://192.168.0.5:9090/api/orden/${id}`)
-          .subscribe(
-              () => {
-                  // Éxito: la orden se eliminó en el backend
-                  this.datos = this.datos.filter((orden: any) => orden.id !== id);
-                  this.tabla1.renderRows();
-              },
-              (error) => {
-                  // Manejo de errores en caso de que la solicitud al backend falle
-                  console.error("Error al eliminar la orden:", error);
-              }
-          );
-  }
+      this.http.delete(`http://${HOST_IP}:9090/api/ordenes/${id}`)  // Utiliza la constante HOST_IP
+        .subscribe(
+          () => {
+            // Éxito: la orden se eliminó en el backend
+            this.datos = this.datos.filter((orden: any) => orden.id !== id);
+            this.tabla1.renderRows();
+          },
+          (error) => {
+            // Manejo de errores en caso de que la solicitud al backend falle
+            console.error("Error al eliminar la orden:", error);
+          }
+        );
+    }
   }
 
   agregar() {
@@ -50,7 +52,7 @@ export class AppComponent {
     });
 
     // Realiza la solicitud POST directa al backend
-    this.http.post('http://192.168.0.5:9090/api/orden', ordenData, { headers })
+    this.http.post(`http://${HOST_IP}:9090/api/ordenes`, ordenData, { headers })
       .subscribe(
         (data) => {
           // Éxito: la orden se agregó en el backend
@@ -66,7 +68,7 @@ export class AppComponent {
   }
 
   editarOrden(orden: Orden) {
-    this.http.put<Orden>(`http://192.168.0.5:9090/api/orden/${orden.id}`, orden)
+    this.http.put<Orden>(`http://${HOST_IP}:9090/api/ordenes/${orden.id}`, orden)
       .subscribe(
         (data) => {
           console.log("Edición exitosa:", data);
@@ -111,15 +113,15 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    this.http.get("http://192.168.0.5:9090/api/orden")
+    this.http.get(`http://${HOST_IP}:9090/api/ordenes`)
       .subscribe(
         resultado => {
           this.datos = resultado;
         }
       );
   }
-}
 
+}
 
 export class Orden {
   constructor(public id: number, public cliente: string, public monto_envio: number, public nro_orden: string, public direccion: string) {

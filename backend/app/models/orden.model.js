@@ -1,3 +1,5 @@
+const { Sequelize } = require('sequelize');
+
 module.exports = (sequelize, Sequelize) => {
     const Orden = sequelize.define("Orden", {
         cliente: {

@@ -50,15 +50,18 @@ exports.findAll = (req, res) => {
     var condition = cliente ? { cliente: { [Op.iLike]: `%${cliente}%` } } : null;
     Ordenes.findAll({ where: condition })
         .then(data => {
+            console.log("Data:", data); 
             res.send(data);
         })
         .catch(err => {
+            console.error("Error:", err);  
             res.status(500).send({
                 message:
                     err.message || "Ocurrió un error al obtener las órdenes."
             });
         });
 };
+
 
 exports.delete = (req, res) => {
     const id = req.params.id;
