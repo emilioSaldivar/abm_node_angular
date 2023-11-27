@@ -159,7 +159,7 @@ export class AppComponent {
     pdf.html(contentHtml, {
       callback: () => {
 
-        pdf.save('ventas.pdf');
+        pdf.save('ordenes.pdf');
       }
     });
   }
