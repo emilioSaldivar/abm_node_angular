@@ -160,6 +160,7 @@ export class AppComponent {
       callback: () => {
 
         pdf.save('ordenes.pdf');
+        console.log("Exportacion exitosa");
       }
     });
   }
